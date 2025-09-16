@@ -1,0 +1,9 @@
+Det er plassholdertekst som brukes til å fylle ut tekstfelt i designmaler, for eksempel for brosjyrer, nettsider og andre grafiske prosjekter. 
+Visuelt fokus:
+Formålet er å la designere og utviklere se hvordan en side vil se ut med en realistisk tekstmengde, uten å bli distrahert av selve innholdet. 
+
+Hvor kommer den fra?
+
+    Latinsk opprinnelse: "Lorem ipsum" er en del av et latinsk verk av filosofen Cicero. 
+Historisk bakgrunn: Teksten ble tilfeldig stokket rundt for å lage et prøveeksemplar av en bok for å demonstrere ulike skrifttyper og ble en standard i bransjen på 1500-
+
