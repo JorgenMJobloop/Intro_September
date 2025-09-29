@@ -1,0 +1,26 @@
+{
+  "Users": [
+    {
+      "Username": "JohnDoe",
+      "PasswordHash": "$2a$11$okB2sdWJCCvHsnce04GhxuMSWyiXgYFJ/8ZNiJj6rK1n90j.7F3b6",
+      "ListedBookings": null
+    }
+  ],
+  "Rooms": [
+    {
+      "Id": 1,
+      "Name": "Room A",
+      "Capacity": 6
+    },
+    {
+      "Id": 2,
+      "Name": "Room B",
+      "Capacity": 10
+    },
+    {
+      "Id": 3,
+      "Name": "Room C",
+      "Capacity": 4
+    }
+  ]
+}
