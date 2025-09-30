@@ -1,3 +1,4 @@
+using System.Globalization;
 using Spectre.Console;
 public class BookingView
 {
@@ -7,10 +8,20 @@ public class BookingView
     /// <returns>DateTime</returns>
     public DateTime PromptForDayTime()
     {
-        var date = AnsiConsole.Ask<string>("Enter date ([green]2025-10-01[/]):");
-        var time = AnsiConsole.Ask<string>("Enter time of day ([green]14:00[/]):");
+        DateTime result;
+        while (true)
+        {
+            var date = AnsiConsole.Ask<string>("Enter date ([green]2025-10-01[/]):");
+            var time = AnsiConsole.Ask<string>("Enter time of day ([green]14:00[/]):");
 
-        return DateTime.Parse($"{date} {time}");
+            var fullInput = $"{date} {time}";
+
+            if (DateTime.TryParseExact(fullInput, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out result))
+            {
+                return result;
+            }
+            AnsiConsole.MarkupLine("[red]ERROR:[/]Incorrect date or time, please try again!");
+        }
     }
     /// <summary>
     /// Lets the user choose a room to book.

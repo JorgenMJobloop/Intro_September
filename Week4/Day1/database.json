@@ -1,9 +1,24 @@
 {
   "Users": [
     {
-      "Username": "JohnDoe",
-      "PasswordHash": "$2a$11$okB2sdWJCCvHsnce04GhxuMSWyiXgYFJ/8ZNiJj6rK1n90j.7F3b6",
-      "ListedBookings": null
+      "Username": "John Doe",
+      "PasswordHash": "$2a$11$vYjb0fSg7M/0ysJ9zB0rq.X4PL3U.Zj1GTnUNiiGhOE70pOGqyBFe",
+      "ListedBookings": [
+        {
+          "RoomId": 1,
+          "_DateTime": "2025-10-22T13:30:00"
+        }
+      ]
+    },
+    {
+      "Username": "Jane Doe",
+      "PasswordHash": "$2a$11$y8T7KNo7vMRhYLIIIb9VGu5Pn.yCwDCagUCbvEz7kWfdxHuxQEFDy",
+      "ListedBookings": [
+        {
+          "RoomId": 4,
+          "_DateTime": "2025-10-12T12:35:00"
+        }
+      ]
     }
   ],
   "Rooms": [
@@ -21,6 +36,11 @@
       "Id": 3,
       "Name": "Room C",
       "Capacity": 4
+    },
+    {
+      "Id": 4,
+      "Name": "Conference Room A",
+      "Capacity": 20
     }
   ]
 }

@@ -5,4 +5,9 @@ public static class PasswordHasher
     {
         return BCrypt.Net.BCrypt.HashPassword(input);
     }
+
+    public static bool Verify(string password, string hashedPassword)
+    {
+        return BCrypt.Net.BCrypt.Verify(password, hashedPassword);
+    }
 }

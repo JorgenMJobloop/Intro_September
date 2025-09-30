@@ -1,3 +1,5 @@
+using Spectre.Console;
+
 public class AuthController
 {
     private readonly AppData appData;
@@ -13,13 +15,20 @@ public class AuthController
         var user = appData.Users.FirstOrDefault(usr => usr.Username == username);
         if (user == null)
         {
+            AnsiConsole.MarkupLine($"[red]ERROR:[/]Could not find user: {username}");
             return null!;
         }
 
-        if (user.PasswordHash == PasswordHasher.PasswordSaltAndHasher(password))
+        var inputHash = PasswordHasher.PasswordSaltAndHasher(password);
+        // AnsiConsole.MarkupLine($"[green]DEBUG:[/]Username = {username}");
+        // AnsiConsole.MarkupLine($"[green]DEBUG:[/]Input hash = {inputHash}");
+        // AnsiConsole.MarkupLine($"[green]DEBUG:[/]Saved hash = {user.PasswordHash}");
+
+        if (PasswordHasher.Verify(password, user.PasswordHash!))
         {
             return user;
         }
+        AnsiConsole.MarkupLine($"[yellow]WARN:[/]The hashes does not match!");
         return null!;
     }
 

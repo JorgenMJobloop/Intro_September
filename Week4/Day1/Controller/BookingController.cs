@@ -9,13 +9,27 @@ public class BookingController
 
     public List<Rooms> GetAvailableRooms(DateTime dateTime)
     {
+
+        if (appData.Rooms == null)
+        {
+            throw new NullReferenceException("List of available rooms cannot be null");
+        }
+
+        if (appData.Users == null)
+        {
+            return appData.Rooms.ToList();
+        }
+
         var bookedRoomsIds = appData.Users
+            .Where(u => u.ListedBookings != null)
             .SelectMany(u => u.ListedBookings!)
             .Where(b => b._DateTime == dateTime)
             .Select(b => b.RoomId)
             .ToHashSet();
 
-        return appData.Rooms.Where(room => !bookedRoomsIds.Contains(room.Id)).ToList();
+        return appData.Rooms
+        .Where(room => !bookedRoomsIds.Contains(room.Id))
+        .ToList();
     }
 
     public bool BookRoom(Users user, int roomId, DateTime dateTime)

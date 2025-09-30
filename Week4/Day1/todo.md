@@ -29,18 +29,14 @@
         - Users
         - Bookings
         - Rooms
-    
     ## Views
         - MenuView
         - LoginView
-        - BookingView 
-    
-    
+        - BookingView     
     ## Controllers
         - AuthController
         - BookingController
         - RoomController
-
     ## Data
         - DataStorage
     ### Services
@@ -48,6 +44,11 @@
             - HashPasswords
             -> Bcrypt (to automatically salt the passwords, rather than a one-way direct SHA256 hash(less secure))
             
+## TODO
+### Add support Admin mode
+### Add all available choices in the CLI
+### 
+
 
 ```sh
 dotnet add package BCrypt.Net-Next --version 4.0.3

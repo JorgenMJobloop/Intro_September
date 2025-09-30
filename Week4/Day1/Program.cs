@@ -1,4 +1,5 @@
-﻿using Spectre.Console;
+﻿using System.Data.Common;
+using Spectre.Console;
 
 namespace Day1;
 
@@ -15,14 +16,18 @@ class Program
                 data.Rooms.Add(new Rooms { Id = 1, Name = "Room A", Capacity = 6 });
                 data.Rooms.Add(new Rooms { Id = 2, Name = "Room B", Capacity = 10 });
                 data.Rooms.Add(new Rooms { Id = 3, Name = "Room C", Capacity = 4 });
+                data.Rooms.Add(new Rooms { Id = 4, Name = "Conference Room A", Capacity = 20 });
             }
         }
         InitalizeRooms(data);
+        //AnsiConsole.Markup($"[green]DEBUG:[/]Number of rooms loaded from database: {data.Rooms.Count}");
+        //Console.Read();
+
 
         // Implement the MVC pattern
         AuthController authController = new AuthController(data);
         BookingController bookingController = new BookingController(data);
-        Users? currentUser = null!;
+        Users? currentUser = null;
         MenuView menuView = new MenuView();
         LoginView loginView = new LoginView();
         BookingView bookingView = new BookingView();
@@ -47,11 +52,13 @@ class Program
                             loginView.ShowFailedLogin();
                         }
                         break;
+
                     case 2:
                         var (_username, _password) = loginView.PromptLogin();
                         if (authController.Register(_username, _password))
                         {
                             AnsiConsole.MarkupLine("[green]New user registered successfully![/]");
+                            DataStorage.Save(data);
                         }
                         else
                         {
@@ -60,9 +67,9 @@ class Program
                         break;
                     case 0:
                         DataStorage.Save(data);
+                        AnsiConsole.MarkupLine("[yellow]Exiting...[/]");
                         return;
                 }
-
             }
             else
             {
