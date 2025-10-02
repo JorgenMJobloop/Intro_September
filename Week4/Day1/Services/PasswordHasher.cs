@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using BCrypt;
 public static class PasswordHasher
 {

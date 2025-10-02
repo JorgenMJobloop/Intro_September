@@ -22,7 +22,7 @@ public class LoginView
     /// <param name="username">username</param>
     public void ShowLoginSuccess(string username)
     {
-        AnsiConsole.MarkupLine($"[green]Logged in as:[/] {username}");
+        AnsiConsole.MarkupLine($"[blue]Logged in as:[/] [bold]{username}[/]");
     }
     /// <summary>
     /// Show a unsuccessful login screen in the CLI

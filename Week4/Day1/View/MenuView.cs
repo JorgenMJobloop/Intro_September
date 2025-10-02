@@ -1,19 +1,39 @@
 using Spectre.Console;
 public class MenuView
 {
-
-    public int ShowLoggedInMenu(string username)
+    public int ShowLoggedInMenu(string username, bool isAdmin)
     {
-        AnsiConsole.MarkupLine($"[blue]Logged in as:[/] [bold]{username}[/]");
+
+        var options = new List<string>()
+        {
+            "Book room", "View bookings", "Cancel booking", "Log out"
+        };
+
+        if (isAdmin.Equals(true))
+        {
+            options.InsertRange
+            (0, new[]
+            {
+                "View all bookings",
+                "Add new meeting room",
+                "Delete a user",
+                "Delete a booking"
+            });
+        }
+
         var choice = AnsiConsole.Prompt(
             new SelectionPrompt<string>()
             .Title("Choose an action")
-            .AddChoices(new[] {
-                "Book room","View bookings","Cancel booking", "log out"
-            }));
+            .AddChoices(options));
 
         return choice switch
         {
+            // Admin specific choices
+            "View all bookings" => 99,
+            "Add new meeting room" => 98,
+            "Delete a user" => 97,
+            "Delete a booking" => 96,
+            // Choices that applies to all users.
             "Book room" => 1,
             "View bookings" => 2,
             "Cancel booking" => 3,

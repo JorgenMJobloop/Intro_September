@@ -1,5 +1,4 @@
-﻿using System.Data.Common;
-using Spectre.Console;
+﻿using Spectre.Console;
 
 namespace Day1;
 
@@ -21,8 +20,7 @@ class Program
         }
         InitalizeRooms(data);
         //AnsiConsole.Markup($"[green]DEBUG:[/]Number of rooms loaded from database: {data.Rooms.Count}");
-        //Console.Read();
-
+        InitalizeAdminUser.InitalizeUserAsAdmin(data);
 
         // Implement the MVC pattern
         AuthController authController = new AuthController(data);
@@ -73,10 +71,74 @@ class Program
             }
             else
             {
-                var action = menuView.ShowLoggedInMenu(currentUser.Username!);
+                var action = menuView.ShowLoggedInMenu(currentUser.Username!, currentUser.IsAdmin);
 
                 switch (action)
                 {
+                    // Add the case for admin user as action: 99
+                    case 99:
+                        // this case is ran, when an admin is logged in to the program, otherwise, it is ignored
+                        foreach (Users user in data.Users)
+                        {
+                            AnsiConsole.MarkupLine($"\n[underline]{user.Username}[/]");
+                            var bookings = bookingController.GetUserBookings(user);
+                            if (bookings.Count == 0)
+                            {
+                                AnsiConsole.MarkupLine("[grey]No bookings found.[/]");
+                            }
+                            else
+                            {
+                                bookingView.ShowBookings(bookings, bookingController.GetRoomById);
+                            }
+                        }
+                        break;
+                    case 98:
+                        var roomName = AnsiConsole.Ask<string>("Name of the new room:");
+                        var capacity = AnsiConsole.Ask<int>("Room capacity:");
+
+                        int nextId = data.Rooms.Any() ? data.Rooms.Max(room => room.Id) + 1 : 1;
+                        data.Rooms.Add(new Rooms { Id = nextId, Name = roomName, Capacity = capacity });
+                        AnsiConsole.MarkupLine($"[green]New room '{roomName}' has been added to the list of available rooms.[/]");
+                        break;
+                    case 97:
+                        // pick a user to delete, and "prompt" out a menu, using Spectre CLI
+                        var userToDelete = AnsiConsole.Prompt(
+                            new SelectionPrompt<string>()
+                            .Title("Pick a user to delete:")
+                            .AddChoices<string>(data.Users
+                            .Where(usr => !usr.IsAdmin && usr.Username != currentUser.Username)
+                            .Select(usr => usr.Username)));
+
+                        if (AnsiConsole.Confirm($"Are you sure you want to delete user: '{userToDelete}'?"))
+                        {
+                            data.Users.RemoveAll(u => u.Username == userToDelete);
+                            AnsiConsole.MarkupLine($"[red]User: '{userToDelete}' has been deleted![/]");
+                        }
+                        break;
+                    case 96:
+                        var chooseUserBookingToDelete = AnsiConsole.Prompt(
+                            new SelectionPrompt<Users>()
+                            .Title("")
+                            .UseConverter(u => u.Username!)
+                            .AddChoices(data.Users.Where(usr => usr.ListedBookings!.Any() == true).ToList())
+                        );
+
+                        var chooseBookingToDelete = AnsiConsole.Prompt(
+                            new SelectionPrompt<Bookings>()
+                            .Title("")
+                            .UseConverter(booking =>
+                            {
+                                var room = bookingController.GetRoomById(booking.RoomId)?.Name ?? "Unknown room";
+                                return $"{booking._DateTime:g} in {room}";
+                            })
+                            .AddChoices(chooseUserBookingToDelete.ListedBookings!)
+                        );
+                        if (AnsiConsole.Confirm("Are you sure you want to delete this booking?"))
+                        {
+                            chooseUserBookingToDelete.ListedBookings!.Remove(chooseBookingToDelete);
+                            AnsiConsole.MarkupLine("[red]Booking deleted.[/]");
+                        }
+                        break;
                     case 1:
                         var _dateTime = bookingView.PromptForDayTime();
                         var available = bookingController.GetAvailableRooms(_dateTime);
